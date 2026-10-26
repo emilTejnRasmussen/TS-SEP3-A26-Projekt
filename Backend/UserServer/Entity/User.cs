@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities;
 
-public class User(string name, string email, string location)
+public class User(string name, string email)
 {
     [Key]
-    private long Id { get; set;}
-    private string Name { get; set; } = name;
-    private string Email { get; set; } = email;
-    private string Location { get; set; } = location;
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long Id { get; private set; }
+    public string Name { get; set; } = name;
+    public string Email { get; set; } = email;
+    public string? Location { get; set; }
 }

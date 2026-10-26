@@ -10,4 +10,14 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Exception\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DTO\DTO.csproj" />
+      <ProjectReference Include="..\Entity\Entity.csproj" />
+      <ProjectReference Include="..\Repository\Repository.csproj" />
+    </ItemGroup>
+
 </Project>

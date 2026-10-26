@@ -1,6 +1,8 @@
 <Solution>
   <Project Path="DTO/DTO.csproj" />
   <Project Path="Entity/Entity.csproj" />
+  <Project Path="Mapper/Mapper.csproj" />
   <Project Path="Repository/Repository.csproj" />
+  <Project Path="Service/Service.csproj" />
   <Project Path="UserAPI/UserAPI.csproj" />
 </Solution>

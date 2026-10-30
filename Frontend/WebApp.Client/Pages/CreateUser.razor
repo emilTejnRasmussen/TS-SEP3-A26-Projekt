@@ -1,0 +1,70 @@
+@page "/users/create"
+@inject IUserService UserService
+
+<PageTitle>Opret bruger</PageTitle>
+
+<h1>Opret bruger</h1>
+
+<EditForm Model="request" OnValidSubmit="SubmitAsync" FormName="create-user" class="col-md-6">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">Navn</label>
+        <InputText class="form-control" @bind-Value="request.Name" />
+        <ValidationMessage For="() => request.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" type="email" @bind-Value="request.Email" />
+        <ValidationMessage For="() => request.Email" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <InputText class="form-control" type="password" @bind-Value="request.Password" />
+        <ValidationMessage For="() => request.Password" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Lokation (valgfri)</label>
+        <InputText class="form-control" @bind-Value="request.Location" />
+    </div>
+
+    <button class="btn btn-primary" type="submit" disabled="@isSubmitting">Opret</button>
+    <a class="btn btn-link" href="users">Tilbage til brugere</a>
+</EditForm>
+
+@if (message is not null)
+{
+    <div class="alert @(isError ? "alert-danger" : "alert-success") mt-3">@message</div>
+}
+
+@code {
+    private CreateUserRequest request = new();
+    private string? message;
+    private bool isError;
+    private bool isSubmitting;
+
+    private async Task SubmitAsync()
+    {
+        isSubmitting = true;
+        message = null;
+        try
+        {
+            var created = await UserService.CreateAsync(request);
+            message = $"Bruger \"{created.Name}\" oprettet (id {created.Id}).";
+            isError = false;
+            request = new();
+        }
+        catch (Exception e)
+        {
+            message = $"Kunne ikke oprette bruger: {e.Message}";
+            isError = true;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

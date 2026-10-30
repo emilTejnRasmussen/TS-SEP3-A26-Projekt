@@ -1,0 +1,62 @@
+@page "/users"
+@inject IUserService UserService
+
+<PageTitle>Brugere</PageTitle>
+
+<h1>Brugere</h1>
+
+<a class="btn btn-primary mb-3" href="users/create">Opret bruger</a>
+
+@if (error is not null)
+{
+    <div class="alert alert-danger">@error</div>
+}
+else if (users is null)
+{
+    <p><em>Henter brugere...</em></p>
+}
+else if (users.Count == 0)
+{
+    <p>Der er ingen brugere endnu.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Navn</th>
+                <th>Email</th>
+                <th>Lokation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>@user.Location</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<UserResponse>? users;
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            users = await UserService.GetAllAsync();
+        }
+        catch (Exception e)
+        {
+            error = $"Kunne ikke hente brugere: {e.Message}";
+        }
+    }
+}

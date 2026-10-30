@@ -1,0 +1,110 @@
+@page "/events/create"
+@inject IEventService EventService
+@inject IUserService UserService
+
+<PageTitle>Opret begivenhed</PageTitle>
+
+<h1>Opret begivenhed</h1>
+
+<EditForm Model="request" OnValidSubmit="SubmitAsync" FormName="create-event" class="col-md-6">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">Titel</label>
+        <InputText class="form-control" @bind-Value="request.Title" />
+        <ValidationMessage For="() => request.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Kort beskrivelse</label>
+        <InputText class="form-control" @bind-Value="request.ShortDescription" />
+        <ValidationMessage For="() => request.ShortDescription" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Lang beskrivelse (valgfri)</label>
+        <InputTextArea class="form-control" rows="4" @bind-Value="request.LongDescription" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Placering</label>
+        <InputText class="form-control" @bind-Value="request.Location" />
+        <ValidationMessage For="() => request.Location" />
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label class="form-label">Tidspunkt</label>
+            <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="request.DateTime" />
+        </div>
+        <div class="col mb-3">
+            <label class="form-label">Max deltagere</label>
+            <InputNumber class="form-control" @bind-Value="request.MaxParticipants" />
+            <ValidationMessage For="() => request.MaxParticipants" />
+        </div>
+    </div>
+
+    @* TODO: Fjern host-valget, når login (JWT) er på plads. *@
+    <div class="mb-3">
+        <label class="form-label">Vært (midlertidig, indtil login virker)</label>
+        <InputSelect class="form-select" @bind-Value="request.HostId">
+            <option value="0">-- Vælg bruger --</option>
+            @foreach (var user in users)
+            {
+                <option value="@user.Id">@user.Name (@user.Email)</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="() => request.HostId" />
+    </div>
+
+    <button class="btn btn-primary" type="submit" disabled="@isSubmitting">Opret</button>
+    <a class="btn btn-link" href="events">Tilbage til begivenheder</a>
+</EditForm>
+
+@if (message is not null)
+{
+    <div class="alert @(isError ? "alert-danger" : "alert-success") mt-3">@message</div>
+}
+
+@code {
+    private CreateEventRequest request = new();
+    private List<UserResponse> users = [];
+    private string? message;
+    private bool isError;
+    private bool isSubmitting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            users = await UserService.GetAllAsync();
+        }
+        catch (Exception e)
+        {
+            message = $"Kunne ikke hente brugere til værts-listen: {e.Message}";
+            isError = true;
+        }
+    }
+
+    private async Task SubmitAsync()
+    {
+        isSubmitting = true;
+        message = null;
+        try
+        {
+            var created = await EventService.CreateAsync(request);
+            message = $"Begivenhed \"{created.Title}\" oprettet (id {created.Id}).";
+            isError = false;
+            request = new();
+        }
+        catch (Exception e)
+        {
+            message = $"Kunne ikke oprette begivenhed: {e.Message}";
+            isError = true;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

@@ -1,0 +1,66 @@
+@page "/events"
+@inject IEventService EventService
+
+<PageTitle>Begivenheder</PageTitle>
+
+<h1>Begivenheder</h1>
+
+<a class="btn btn-primary mb-3" href="events/create">Opret begivenhed</a>
+
+@if (error is not null)
+{
+    <div class="alert alert-danger">@error</div>
+}
+else if (events is null)
+{
+    <p><em>Henter begivenheder...</em></p>
+}
+else if (events.Count == 0)
+{
+    <p>Der er ingen begivenheder endnu.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titel</th>
+                <th>Beskrivelse</th>
+                <th>Placering</th>
+                <th>Tidspunkt</th>
+                <th>Max deltagere</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ev in events)
+            {
+                <tr>
+                    <td>@ev.Title</td>
+                    <td>@ev.ShortDescription</td>
+                    <td>@ev.Location</td>
+                    <td>@ev.DateTime.ToString("dd-MM-yyyy HH:mm")</td>
+                    <td>@ev.MaxParticipants</td>
+                    <td>@ev.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<EventResponse>? events;
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            events = await EventService.GetAllAsync();
+        }
+        catch (Exception e)
+        {
+            error = $"Kunne ikke hente begivenheder: {e.Message}";
+        }
+    }
+}

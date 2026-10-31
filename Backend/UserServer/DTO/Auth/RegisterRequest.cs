@@ -4,10 +4,13 @@ namespace DTO.Auth;
 
 public record RegisterRequest(
     [Required]
-    [StringLength(50, MinimumLength = 3)]
-    string Username,
-    
-    [Required]
-    [MinLength(8)]
-    string Password
+    string Name,
+
+    [Required, EmailAddress]
+    string Email,
+
+    [Required, MinLength(8)]
+    string Password,
+
+    string? Location
 );

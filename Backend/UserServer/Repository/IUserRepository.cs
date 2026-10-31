@@ -9,4 +9,8 @@ public interface IUserRepository
     Task DeleteAsync(int id);
     Task<User> GetSingleByIdAsync(long id);
     IQueryable<User> GetMany();
+
+    Task<User> GetByEmailAsync(string email);
+
+    Task<bool> EmailAlreadyExistsAsync(string email);
 }

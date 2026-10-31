@@ -1,6 +1,6 @@
 <Solution>
+  <Project Path="../../Shared/DTO/DTO.csproj" />
   <Project Path="Context/Context.csproj" />
-  <Project Path="DTO/DTO.csproj" />
   <Project Path="Entity/Entity.csproj" />
   <Project Path="Mapper/Mapper.csproj" />
   <Project Path="Repository/Repository.csproj" />

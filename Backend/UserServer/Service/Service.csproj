@@ -11,6 +11,7 @@
       <ProjectReference Include="..\Entity\Entity.csproj" />
       <ProjectReference Include="..\Mapper\Mapper.csproj" />
       <ProjectReference Include="..\Repository\Repository.csproj" />
+      <ProjectReference Include="..\..\..\Shared\DTO\DTO.csproj" />
     </ItemGroup>
 
     <ItemGroup>

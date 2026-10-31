@@ -33,6 +33,10 @@ namespace Context.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("HashedPassword")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Location")
                         .HasColumnType("text");
 

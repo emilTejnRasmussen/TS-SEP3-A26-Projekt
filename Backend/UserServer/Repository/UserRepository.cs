@@ -1,38 +1,55 @@
 ﻿using Context;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using Repository.Exceptions;
 
 namespace Repository;
 
 public class UserRepository(AppDbContext context) : IUserRepository
 {
-
-    private readonly AppDbContext context = context;
-
-    public Task<User> AddAsync(User entity)
+    public async Task<User> AddAsync(User entity)
     {
-        throw new NotImplementedException();
+        context.Users.Add(entity);
+        await context.SaveChangesAsync();
+
+        return entity;
     }
 
-    public Task UpdateAsync(User entity)
+    public async Task UpdateAsync(User entity)
     {
-        throw new NotImplementedException();
+        context.Users.Update(entity);
+        await context.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(int id)
+    public async Task DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        var user = await GetSingleByIdAsync(id);
+
+        context.Users.Remove(user);
+        await context.SaveChangesAsync();
     }
 
     public async Task<User> GetSingleByIdAsync(long id)
     {
-        var user = await context.Users.FindAsync(id) ?? throw new UserNotFoundException(id);
-        
-        return user;
+        return await context.Users.FindAsync(id)
+               ?? throw new UserNotFoundException(id);
     }
 
     public IQueryable<User> GetMany()
     {
-        throw new NotImplementedException();
+        return context.Users.AsNoTracking();
+    }
+
+    public async Task<User> GetByEmailAsync(string email)
+    {
+        return await context.Users
+                   .FirstOrDefaultAsync(u => u.Email == email)
+               ?? throw new UserNotFoundException(email);
+    }
+
+    public async Task<bool> EmailAlreadyExistsAsync(string email)
+    {
+        return await context.Users
+            .AnyAsync(u => u.Email == email);
     }
 }

@@ -6,7 +6,7 @@ public interface IUserRepository
 {
     Task<User> AddAsync(User entity);
     Task UpdateAsync(User entity);
-    Task DeleteAsync(int id);
+    Task DeleteAsync(long id);
     Task<User> GetSingleByIdAsync(long id);
     IQueryable<User> GetMany();
 

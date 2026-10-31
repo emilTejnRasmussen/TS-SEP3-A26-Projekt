@@ -1,7 +1,13 @@
-
-
 using Context;
+using Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Repository;
+using Service;
+using Service.Interface;
+using WebApi.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 

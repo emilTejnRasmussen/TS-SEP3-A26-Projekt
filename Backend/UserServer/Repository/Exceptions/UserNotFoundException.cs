@@ -1,3 +1,14 @@
 ﻿namespace Repository.Exceptions;
 
-public class UserNotFoundException(long id) : Exception($"User with id {id} not found");
+public class UserNotFoundException : Exception
+{
+    public UserNotFoundException(long id)
+        : base($"User with id {id} not found")
+    {
+    }
+
+    public UserNotFoundException(string email)
+        : base($"User with email '{email}' not found")
+    {
+    }
+}

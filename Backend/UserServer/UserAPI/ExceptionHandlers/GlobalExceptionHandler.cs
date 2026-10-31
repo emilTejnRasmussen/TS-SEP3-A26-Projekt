@@ -1,6 +1,6 @@
 ﻿using Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
-using RepositoryContract.Exceptions;
+using Repository.Exceptions;
 using Services.Exceptions;
 
 namespace WebApi.ExceptionHandlers;
@@ -14,7 +14,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         var statusCode = exception switch
         {
-            EntityNotFoundException => StatusCodes.Status404NotFound,
+            UserNotFoundException => StatusCodes.Status404NotFound,
             EmailAlreadyExistsException => StatusCodes.Status409Conflict,
             InvalidCredentialsException => StatusCodes.Status401Unauthorized,
             InvalidCurrentPasswordException => StatusCodes.Status400BadRequest,

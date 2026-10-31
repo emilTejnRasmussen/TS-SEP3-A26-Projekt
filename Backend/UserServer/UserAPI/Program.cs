@@ -79,6 +79,11 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "SEP3 User API");
+    });
+    
     using var scope = app.Services.CreateScope();
 
     var dbContext = scope.ServiceProvider

@@ -1,19 +1,18 @@
 ﻿using DTO.Event;
+using GrpcClient;
 using Service.Interface;
 
 namespace Service;
 
-public class EventService : IEventService
+public class EventService(IEventGrpcClient eventClient) : IEventService
 {
     public Task<EventResponse> CreateEventAsync(CreateEventRequest request)
     {
-        // TODO: Forward request to Java EventServer via gRPC
-        return Task.FromResult(new EventResponse());
+        return eventClient.CreateEventAsync(request);
     }
 
     public Task<EventResponse> GetEventByIdAsync(long id)
     {
-        // TODO: Retrieve event from Java EventServer via gRPC
-        return Task.FromResult(new EventResponse());
+        return eventClient.GetEventByIdAsync(id);
     }
 }

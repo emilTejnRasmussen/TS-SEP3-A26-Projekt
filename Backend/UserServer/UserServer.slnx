@@ -2,6 +2,7 @@
   <Project Path="../../Shared/DTO/DTO.csproj" />
   <Project Path="Context/Context.csproj" />
   <Project Path="Entity/Entity.csproj" />
+  <Project Path="GrpcClient/GrpcClient.csproj" />
   <Project Path="Mapper/Mapper.csproj" />
   <Project Path="Repository/Repository.csproj" />
   <Project Path="Service/Service.csproj" />

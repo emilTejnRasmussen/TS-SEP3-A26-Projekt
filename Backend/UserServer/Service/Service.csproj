@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DTO\DTO.csproj" />
       <ProjectReference Include="..\Entity\Entity.csproj" />
+      <ProjectReference Include="..\GrpcClient\GrpcClient.csproj" />
       <ProjectReference Include="..\Mapper\Mapper.csproj" />
       <ProjectReference Include="..\Repository\Repository.csproj" />
       <ProjectReference Include="..\..\..\Shared\DTO\DTO.csproj" />

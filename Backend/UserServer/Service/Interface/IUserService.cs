@@ -6,4 +6,5 @@ public interface IUserService
 {
     Task<UserResponse> CreateUserAsync(CreateUserRequest request);
     Task<UserResponse> GetUserByIdAsync(long id);
+    Task<List<UserResponse>> GetManyAsync(string? nameContains = null);
 }

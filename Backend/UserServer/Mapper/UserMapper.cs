@@ -3,7 +3,7 @@ using Entities;
 
 namespace Mapper;
 
-public class UserMapper
+public static class UserMapper
 {
     public static UserResponse ToDto(User user)
     {

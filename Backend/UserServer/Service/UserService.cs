@@ -22,8 +22,10 @@ public class UserService(IUserRepository userRepo) : IUserService
         return UserMapper.ToDto(createdUser);
     }
 
-    public Task<UserResponse> GetUserByIdAsync(long id)
+    public async Task<UserResponse> GetUserByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var user = await userRepo.GetSingleByIdAsync(id);
+
+        return UserMapper.ToDto(user);
     }
 }

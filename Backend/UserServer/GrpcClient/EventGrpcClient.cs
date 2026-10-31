@@ -13,4 +13,9 @@ public class EventGrpcClient : IEventGrpcClient
     {
         throw new NotImplementedException();
     }
+
+    public Task<List<EventResponse>> GetManyAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

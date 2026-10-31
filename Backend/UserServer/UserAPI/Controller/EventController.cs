@@ -21,4 +21,12 @@ public class EventsController(IEventService eventService) : ApiControllerBase
 
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetMany()
+    {
+        var response = await eventService.GetManyAsync();
+
+        return Ok(response);
+    }
 }

@@ -15,4 +15,9 @@ public class EventService(IEventGrpcClient eventClient) : IEventService
     {
         return eventClient.GetEventByIdAsync(id);
     }
+
+    public Task<List<EventResponse>> GetManyAsync()
+    {
+        return eventClient.GetManyAsync();
+    }
 }

@@ -4,9 +4,7 @@ using Service.Interface;
 
 namespace UserAPI.Controller;
 
-[ApiController]
-[Route("[controller]")]
-public class EventsController(IEventService eventService) : ControllerBase
+public class EventsController(IEventService eventService) : ApiControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> AddEvent([FromBody] CreateEventRequest request)

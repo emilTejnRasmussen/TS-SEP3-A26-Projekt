@@ -3,12 +3,8 @@ using Service.Interface;
 
 namespace UserAPI.Controller;
 
-[ApiController]
-[Route("[controller]")]
-public class UsersController(IUserService userService) : ControllerBase
+public class UsersController(IUserService userService) : ApiControllerBase
 {
-    
-    
     [HttpGet("{userId:long}")]
     public async Task<IActionResult> GetSingleAsync([FromRoute] long userId)
     {

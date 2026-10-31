@@ -6,9 +6,7 @@ using WebApi.Authentication;
 
 namespace UserAPI.Controller;
 
-[ApiController]
-[Route("[controller]")]
-public class AuthController(IAuthService authService) : ControllerBase
+public class AuthController(IAuthService authService) : ApiControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterRequest request)

@@ -1,5 +1,4 @@
-﻿using Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
 
 namespace UserAPI.Controller;

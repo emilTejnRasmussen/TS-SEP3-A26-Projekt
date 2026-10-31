@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Repository.Exceptions;
 using Services.Exceptions;
 
-namespace WebApi.ExceptionHandlers;
+namespace UserAPI.ExceptionHandlers;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {

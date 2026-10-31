@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Service;
 using Service.Interface;
+using UserAPI.ExceptionHandlers;
 using WebApi.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
@@ -97,6 +100,8 @@ using (var scope = app.Services.CreateScope())
 
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();

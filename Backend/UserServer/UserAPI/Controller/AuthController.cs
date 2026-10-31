@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
+using WebApi.Authentication;
 
 namespace UserAPI.Controller;
 
@@ -30,7 +31,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         return Ok(new
         {
             message = "You are authenticated!",
-            username = User.Identity?.Name
+            user_id = User.GetUserId()
         });
     }
 }

@@ -1,27 +1,52 @@
+
 # ==========================================
-# Environment and secrets
+# Environment variables and secrets
 # ==========================================
 .env
 .env.*
 !.env.example
+!.env.sample
+
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
 
 # ==========================================
 # IDEs and editors
 # ==========================================
 
-# IntelliJ IDEA
+# JetBrains Rider / IntelliJ IDEA
 .idea/
 *.iml
+*.DotSettings.user
+_ReSharper*/
+*.DotCover
 
 # Visual Studio
 .vs/
-*.suo
 *.user
+*.suo
 *.userosscache
 *.sln.docstates
 
-# VS Code
+# Visual Studio Code
 .vscode/
+
+# ==========================================
+# .NET / C#
+# ==========================================
+**/bin/
+**/obj/
+artifacts/
+**/Debug/
+**/Release/
+**/publish/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/packages/
 
 # ==========================================
 # Java / Maven / Spring Boot
@@ -33,14 +58,18 @@
 *.ear
 hs_err_pid*
 
+# Maven wrapper JARs must remain tracked
+!**/.mvn/wrapper/maven-wrapper.jar
+
 # ==========================================
-# .NET / C#
+# Test results and coverage
 # ==========================================
-**/bin/
-**/obj/
-*.user
-*.suo
-*.cache
+TestResults/
+coverage/
+coverage.cobertura.xml
+*.coverage
+*.coveragexml
+*.trx
 
 # ==========================================
 # Build and temporary files
@@ -50,7 +79,19 @@ dist/
 out/
 tmp/
 temp/
+*.cache
+*.tmp
+*.bak
+*~
 *.log
+logs/
+
+# ==========================================
+# Local database and container data
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
 
 # ==========================================
 # Operating system files
@@ -65,10 +106,3 @@ $RECYCLE.BIN/
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# ==========================================
-# Local database and container data
-# ==========================================
-*.db
-*.sqlite
-*.sqlite3

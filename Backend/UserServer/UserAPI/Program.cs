@@ -32,6 +32,18 @@ builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:5000",
+                "http://localhost:7162")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("JWT signing key is missing.");
 
@@ -110,6 +122,8 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
+
+app.UseCors("Frontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

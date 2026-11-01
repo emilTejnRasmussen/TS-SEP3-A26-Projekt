@@ -1,0 +1,57 @@
+@page "/login"
+@using WebApp.Client.DTO.Auth
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+
+<PageTitle>Log ind</PageTitle>
+
+<h1>Log ind</h1>
+
+<EditForm Model="request" OnValidSubmit="SubmitAsync" FormName="login" class="col-md-6">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" type="email" @bind-Value="request.Email" />
+        <ValidationMessage For="() => request.Email" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <InputText class="form-control" type="password" @bind-Value="request.Password" />
+        <ValidationMessage For="() => request.Password" />
+    </div>
+
+    <button class="btn btn-primary" type="submit" disabled="@isSubmitting">Log ind</button>
+    <a class="btn btn-link" href="register">Opret bruger</a>
+</EditForm>
+
+@if (error is not null)
+{
+    <div class="alert alert-danger mt-3">@error</div>
+}
+
+@code {
+    private LoginRequest request = new();
+    private string? error;
+    private bool isSubmitting;
+
+    private async Task SubmitAsync()
+    {
+        isSubmitting = true;
+        error = null;
+        try
+        {
+            await AuthService.LoginAsync(request);
+            Navigation.NavigateTo("events");
+        }
+        catch (Exception e)
+        {
+            error = $"Kunne ikke logge ind: {e.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

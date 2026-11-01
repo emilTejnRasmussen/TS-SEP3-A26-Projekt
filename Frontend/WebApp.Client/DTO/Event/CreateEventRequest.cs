@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Client.DTO.Event;
 
-// TODO: Backendens Event-DTO findes ikke endnu. Felterne er taget fra domænemodellen -
+// TODO: Backendens CreateEventRequest (Shared/DTO/Event) er stadig tom. Felterne er taget fra domænemodellen -
 // ret navnene, så de matcher backendens CreateEventRequest, når den er lavet.
 public class CreateEventRequest
 {

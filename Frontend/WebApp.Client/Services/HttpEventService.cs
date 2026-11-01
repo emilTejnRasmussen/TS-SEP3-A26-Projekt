@@ -5,7 +5,7 @@ namespace WebApp.Client.Services;
 
 public class HttpEventService(HttpClient client) : IEventService
 {
-    // POST /Events
+    // POST /api/v1/Events
     public async Task<EventResponse> CreateAsync(CreateEventRequest request)
     {
         var response = await client.PostAsJsonAsync(ApiEndpoints.Events, request);
@@ -13,7 +13,15 @@ public class HttpEventService(HttpClient client) : IEventService
         return (await response.Content.ReadFromJsonAsync<EventResponse>())!;
     }
 
-    // GET /Events
+    // GET /api/v1/Events/{id}
+    public async Task<EventResponse> GetByIdAsync(long id)
+    {
+        var response = await client.GetAsync($"{ApiEndpoints.Events}/{id}");
+        await ApiException.ThrowIfFailedAsync(response);
+        return (await response.Content.ReadFromJsonAsync<EventResponse>())!;
+    }
+
+    // GET /api/v1/Events
     public async Task<List<EventResponse>> GetAllAsync()
     {
         var response = await client.GetAsync(ApiEndpoints.Events);

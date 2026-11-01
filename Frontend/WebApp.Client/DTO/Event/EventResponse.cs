@@ -1,6 +1,6 @@
 namespace WebApp.Client.DTO.Event;
 
-// TODO: Ret felterne, så de matcher backendens EventResponse, når den er lavet.
+// TODO: Backendens EventResponse (Shared/DTO/Event) er stadig tom - ret felterne, når den er lavet.
 public record EventResponse(
     long Id,
     string Title,

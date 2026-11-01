@@ -13,6 +13,7 @@ public static class ServiceRegistration
                       ?? throw new InvalidOperationException("ApiBaseUrl mangler i appsettings.json");
 
         services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(baseUrl) });
+        services.AddScoped<IAuthService, HttpAuthService>();
         services.AddScoped<IUserService, HttpUserService>();
         services.AddScoped<IEventService, HttpEventService>();
         return services;

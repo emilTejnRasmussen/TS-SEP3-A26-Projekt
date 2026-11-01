@@ -5,18 +5,22 @@ namespace WebApp.Client.Services;
 
 public class HttpUserService(HttpClient client) : IUserService
 {
-    // POST /Users
-    public async Task<UserResponse> CreateAsync(CreateUserRequest request)
+    // GET /api/v1/Users/{id}
+    public async Task<UserResponse> GetByIdAsync(long id)
     {
-        var response = await client.PostAsJsonAsync(ApiEndpoints.Users, request);
+        var response = await client.GetAsync($"{ApiEndpoints.Users}/{id}");
         await ApiException.ThrowIfFailedAsync(response);
         return (await response.Content.ReadFromJsonAsync<UserResponse>())!;
     }
 
-    // GET /Users
-    public async Task<List<UserResponse>> GetAllAsync()
+    // GET /api/v1/Users?nameContains=...
+    public async Task<List<UserResponse>> GetAllAsync(string? nameContains = null)
     {
-        var response = await client.GetAsync(ApiEndpoints.Users);
+        var url = string.IsNullOrWhiteSpace(nameContains)
+            ? ApiEndpoints.Users
+            : $"{ApiEndpoints.Users}?nameContains={Uri.EscapeDataString(nameContains)}";
+
+        var response = await client.GetAsync(url);
         await ApiException.ThrowIfFailedAsync(response);
         return await response.Content.ReadFromJsonAsync<List<UserResponse>>() ?? [];
     }

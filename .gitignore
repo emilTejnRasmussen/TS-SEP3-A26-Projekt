@@ -1,24 +1,46 @@
-# JetBrains Rider
+
+# ==========================================
+# Environment variables and secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+!.env.sample
+
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+
+# ==========================================
+# IDEs and editors
+# ==========================================
+
+# JetBrains Rider / IntelliJ IDEA
 .idea/
-*.sln.iml
+*.iml
 *.DotSettings.user
 _ReSharper*/
 *.DotCover
-*.slnx.DotSettings.user
 
-# .NET build output
-bin/
-obj/
-artifacts/
-Debug/
-Release/
-publish/
-
-# User-specific IDE files
+# Visual Studio
+.vs/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# ==========================================
+# .NET / C#
+# ==========================================
+**/bin/
+**/obj/
+artifacts/
+**/Debug/
+**/Release/
+**/publish/
 
 # NuGet
 *.nupkg
@@ -26,32 +48,61 @@ publish/
 packages/
 .nuget/packages/
 
+# ==========================================
+# Java / Maven / Spring Boot
+# ==========================================
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# Maven wrapper JARs must remain tracked
+!**/.mvn/wrapper/maven-wrapper.jar
+
+# ==========================================
 # Test results and coverage
+# ==========================================
 TestResults/
 coverage/
 coverage.cobertura.xml
 *.coverage
-    *.coveragexml
+*.coveragexml
+*.trx
 
-# Logs
-*.log
-logs/
-
-# Environment variables and secrets
-.env
-.env.*
-!.env.example
-!.env.sample
-appsettings.Local.json
-appsettings.*.Local.json
-secrets.json
-
-# Operating system
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# Temporary files
+# ==========================================
+# Build and temporary files
+# ==========================================
+build/
+dist/
+out/
+tmp/
+temp/
+*.cache
 *.tmp
 *.bak
 *~
+*.log
+logs/
+
+# ==========================================
+# Local database and container data
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ==========================================
+# Operating system files
+# ==========================================
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride

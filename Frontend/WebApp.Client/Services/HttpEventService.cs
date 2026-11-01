@@ -13,14 +13,6 @@ public class HttpEventService(HttpClient client) : IEventService
         return (await response.Content.ReadFromJsonAsync<EventResponse>())!;
     }
 
-    // GET /api/v1/Events/{id}
-    public async Task<EventResponse> GetByIdAsync(long id)
-    {
-        var response = await client.GetAsync($"{ApiEndpoints.Events}/{id}");
-        await ApiException.ThrowIfFailedAsync(response);
-        return (await response.Content.ReadFromJsonAsync<EventResponse>())!;
-    }
-
     // GET /api/v1/Events
     public async Task<List<EventOverviewResponse>> GetAllAsync()
     {

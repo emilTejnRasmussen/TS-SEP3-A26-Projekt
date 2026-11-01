@@ -22,10 +22,10 @@ public class HttpEventService(HttpClient client) : IEventService
     }
 
     // GET /api/v1/Events
-    public async Task<List<EventResponse>> GetAllAsync()
+    public async Task<List<EventOverviewResponse>> GetAllAsync()
     {
         var response = await client.GetAsync(ApiEndpoints.Events);
         await ApiException.ThrowIfFailedAsync(response);
-        return await response.Content.ReadFromJsonAsync<List<EventResponse>>() ?? [];
+        return await response.Content.ReadFromJsonAsync<List<EventOverviewResponse>>() ?? [];
     }
 }

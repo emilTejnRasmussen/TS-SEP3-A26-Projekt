@@ -6,5 +6,5 @@ public interface IEventService
 {
     Task<EventResponse> CreateAsync(CreateEventRequest request);
     Task<EventResponse> GetByIdAsync(long id);
-    Task<List<EventResponse>> GetAllAsync();
+    Task<List<EventOverviewResponse>> GetAllAsync();
 }

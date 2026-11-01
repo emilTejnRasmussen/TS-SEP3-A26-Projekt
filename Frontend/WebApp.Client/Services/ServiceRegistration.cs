@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +13,20 @@ public static class ServiceRegistration
         var baseUrl = config["ApiBaseUrl"]
                       ?? throw new InvalidOperationException("ApiBaseUrl mangler i appsettings.json");
 
-        services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(baseUrl) });
+        // Login-tilstand (JWT i localStorage) til AuthorizeView m.m.
+        services.AddAuthorizationCore();
+        services.AddCascadingAuthenticationState();
+        services.AddScoped<TokenStore>();
+        services.AddScoped<JwtAuthStateProvider>();
+        services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<JwtAuthStateProvider>());
+
+        // HttpClient sender JWT'en med på alle kald via AuthHeaderHandler.
+        services.AddScoped(sp => new HttpClient(
+            new AuthHeaderHandler(sp.GetRequiredService<TokenStore>()) { InnerHandler = new HttpClientHandler() })
+        {
+            BaseAddress = new Uri(baseUrl)
+        });
+
         services.AddScoped<IAuthService, HttpAuthService>();
         services.AddScoped<IUserService, HttpUserService>();
         services.AddScoped<IEventService, HttpEventService>();

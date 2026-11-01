@@ -1,6 +1,7 @@
 namespace WebApp.Client.DTO.Event;
 
-// TODO: Backendens EventResponse (Shared/DTO/Event) er stadig tom - ret felterne, når den er lavet.
+// Felterne følger Contracts/proto/event.proto (EventResponse).
+// TODO: Tjek mod backendens Shared/DTO/Event/EventResponse, når den er udfyldt.
 public record EventResponse(
     long Id,
     string Title,
@@ -9,6 +10,5 @@ public record EventResponse(
     string Location,
     int MaxParticipants,
     DateTime DateTime,
-    string? Status,
-    long HostId
+    List<long> HostIds
 );

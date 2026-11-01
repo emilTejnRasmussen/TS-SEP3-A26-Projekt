@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Client.DTO.Event;
 
-// TODO: Backendens CreateEventRequest (Shared/DTO/Event) er stadig tom. Felterne er taget fra domænemodellen -
-// ret navnene, så de matcher backendens CreateEventRequest, når den er lavet.
+// Felterne følger Contracts/proto/event.proto (CreateEventRequest).
+// TODO: Tjek mod backendens Shared/DTO/Event/CreateEventRequest, når den er udfyldt.
 public class CreateEventRequest
 {
     [Required(ErrorMessage = "Titel er påkrævet")]
@@ -20,9 +20,11 @@ public class CreateEventRequest
     [Range(1, int.MaxValue, ErrorMessage = "Max deltagere skal være mindst 1")]
     public int MaxParticipants { get; set; } = 10;
 
-    public DateTime DateTime { get; set; } = DateTime.Now.Date.AddDays(1).AddHours(18);
+    // Uden tidszone (Kind = Unspecified), fordi Event Serveren læser den som Java LocalDateTime.
+    public DateTime DateTime { get; set; } =
+        DateTime.SpecifyKind(DateTime.Today.AddDays(1).AddHours(18), DateTimeKind.Unspecified);
 
-    // TODO: Fjern, når login (JWT) er på plads - så finder backenden værten ud fra tokenet.
-    [Range(1, long.MaxValue, ErrorMessage = "Vælg en vært")]
-    public long HostId { get; set; }
+    // Et event kan have flere værter. Siden sætter den indloggede bruger som vært.
+    // TODO: Fjern, når backenden selv tager værten fra JWT'en.
+    public List<long> HostIds { get; set; } = [];
 }

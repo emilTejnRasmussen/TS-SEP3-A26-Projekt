@@ -5,7 +5,9 @@
 
 <h1>Begivenheder</h1>
 
-<a class="btn btn-primary mb-3" href="events/create">Opret begivenhed</a>
+<AuthorizeView>
+    <a class="btn btn-primary mb-3" href="events/create">Opret begivenhed</a>
+</AuthorizeView>
 
 @if (error is not null)
 {
@@ -28,8 +30,6 @@ else
                 <th>Beskrivelse</th>
                 <th>Placering</th>
                 <th>Tidspunkt</th>
-                <th>Max deltagere</th>
-                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -40,8 +40,6 @@ else
                     <td>@ev.ShortDescription</td>
                     <td>@ev.Location</td>
                     <td>@ev.DateTime.ToString("dd-MM-yyyy HH:mm")</td>
-                    <td>@ev.MaxParticipants</td>
-                    <td>@ev.Status</td>
                 </tr>
             }
         </tbody>
@@ -49,7 +47,7 @@ else
 }
 
 @code {
-    private List<EventResponse>? events;
+    private List<EventOverviewResponse>? events;
     private string? error;
 
     protected override async Task OnInitializedAsync()

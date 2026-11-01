@@ -44,6 +44,16 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services
+    .AddGrpcClient<Kin.Events.EventService.EventServiceClient>(
+        options =>
+        {
+            options.Address = new Uri(
+                builder.Configuration["Grpc:EventServer"]
+                ?? throw new InvalidOperationException(
+                    "EventServer address is missing."));
+        });
+
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("JWT signing key is missing.");
 

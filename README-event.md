@@ -107,7 +107,15 @@ Run the following command from the **repository root**, where `compose.yaml` is 
 podman compose up -d --build
 ```
 
-This builds the EventServer image and starts both EventServer and PostgreSQL in the background.
+This builds the EventServer image and starts both EventServer and PostgreSQL in the background. It can take a while.
+
+Once the image has been built, you can omit the `--build` flag when restarting the application, as long as you haven't made any changes to the code or build configuration.
+
+You can then simply run:
+
+```powershell
+podman compose up -d
+```
 
 To check which containers are running:
 
@@ -115,7 +123,7 @@ To check which containers are running:
 podman ps
 ```
 
-You should see the event-db and the event-server container.
+You should see the event-db and the event-server container. Now the EventServerApplication is up and running.
 
 If a container does not start, inspect its logs using the container name shown by `podman ps -a`:
 

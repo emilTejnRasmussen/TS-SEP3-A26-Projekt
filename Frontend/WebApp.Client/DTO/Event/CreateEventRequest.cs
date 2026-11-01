@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WebApp.Client.DTO.Event;
 
 // Felterne følger Contracts/proto/event.proto (CreateEventRequest).
-// TODO: Tjek mod backendens Shared/DTO/Event/CreateEventRequest, når den er udfyldt.
+// Matcher backendens Shared/DTO/Event/CreateEventRequest.
 public class CreateEventRequest
 {
     [Required(ErrorMessage = "Titel er påkrævet")]
@@ -12,7 +12,8 @@ public class CreateEventRequest
     [Required(ErrorMessage = "Kort beskrivelse er påkrævet")]
     public string ShortDescription { get; set; } = "";
 
-    public string? LongDescription { get; set; }
+    // Tom streng i stedet for null: backendens DTO har ikke-nullable string, og proto-strenge må ikke være null.
+    public string LongDescription { get; set; } = "";
 
     [Required(ErrorMessage = "Placering er påkrævet")]
     public string Location { get; set; } = "";

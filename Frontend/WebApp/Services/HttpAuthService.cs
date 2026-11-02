@@ -5,7 +5,6 @@ namespace WebApp.Services;
 
 public class HttpAuthService(HttpClient client, TokenStore tokens, JwtAuthStateProvider authState) : IAuthService
 {
-    // POST /api/v1/Auth/register - opretter brugeren og logger ind med det samme.
     public async Task RegisterAsync(RegisterRequest request)
     {
         var response = await client.PostAsJsonAsync(ApiEndpoints.Register, request);
@@ -13,7 +12,6 @@ public class HttpAuthService(HttpClient client, TokenStore tokens, JwtAuthStateP
         await SaveTokenAsync(response);
     }
 
-    // POST /api/v1/Auth/login
     public async Task LoginAsync(LoginRequest request)
     {
         var response = await client.PostAsJsonAsync(ApiEndpoints.Login, request);

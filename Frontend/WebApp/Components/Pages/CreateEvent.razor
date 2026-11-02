@@ -79,8 +79,7 @@
         message = null;
         try
         {
-            // Den indloggede bruger er vært ("sub" i JWT'en = bruger-id).
-            // TODO: Fjern, når backenden selv tager værten fra tokenet.
+            // TODO: Fjern, når backenden selv tager værten fra JWT'en ("sub" = bruger-id).
             var user = (await AuthState).User;
             if (!long.TryParse(user.FindFirst("sub")?.Value, out var userId))
             {
@@ -104,8 +103,7 @@
         }
     }
 
-    // Standardværdier til formularen. Tidspunkt uden tidszone (Kind = Unspecified),
-    // fordi Event Serveren læser det som Java LocalDateTime.
+    // Uden tidszone, fordi Event Serveren læser tidspunktet som Java LocalDateTime.
     private static CreateEventRequest NewRequest() => new()
     {
         MaxParticipants = 10,

@@ -2,7 +2,6 @@ using System.Text.Json;
 
 namespace WebApp.Services;
 
-// Kastes når backenden svarer med en fejlstatus, så siderne kan vise beskeden.
 public class ApiException(string message) : Exception(message)
 {
     public static async Task ThrowIfFailedAsync(HttpResponseMessage response)

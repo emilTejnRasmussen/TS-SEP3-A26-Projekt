@@ -5,7 +5,6 @@ namespace WebApp.Services;
 
 public class HttpUserService(HttpClient client) : IUserService
 {
-    // GET /api/v1/Users
     public async Task<List<UserResponse>> GetAllAsync()
     {
         var response = await client.GetAsync(ApiEndpoints.Users);

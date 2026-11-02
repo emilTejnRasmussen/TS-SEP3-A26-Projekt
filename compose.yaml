@@ -10,6 +10,12 @@ services:
       - "5433:5432"
     volumes:
       - event-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${USER_DB_USER} -d ${USER_DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     restart: unless-stopped
 
   event-server:
@@ -18,7 +24,8 @@ services:
       dockerfile: Backend/EventServer/Containerfile
     container_name: event-server
     depends_on:
-      - event-db
+      event-db:
+        condition: service_healthy
     environment:
       EVENT_DB_HOST: event-db
       EVENT_DB_PORT: 5432
@@ -27,7 +34,69 @@ services:
       EVENT_DB_PASSWORD: ${EVENT_DB_PASSWORD}
     ports:
       - "9090:9090"
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "echo > /dev/tcp/127.0.0.1/9090" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 60s
     restart: unless-stopped
+
+  user-db:
+    image: postgres:17
+    container_name: user-db
+    environment:
+      POSTGRES_DB: ${USER_DB_NAME}
+      POSTGRES_USER: ${USER_DB_USER}
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${USER_DB_USER} -d ${USER_DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+
+  user-server:
+    build:
+      context: .
+      dockerfile: Backend/UserServer/Containerfile
+    container_name: user-server
+    depends_on:
+      user-db:
+        condition: service_healthy
+      event-server:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Host=user-db;Port=5432;Database=${USER_DB_NAME};Username=${USER_DB_USER};Password=${USER_DB_PASSWORD}"
+      Jwt__Key: ${USER_JWT_KEY}
+      Grpc__EventServer: http://event-server:9090
+    ports:
+      - "8081:8080"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Frontend/Containerfile
+    container_name: frontend
+    depends_on:
+      - user-server
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ApiBaseUrl: http://user-server:8080/
+      DataProtection__KeysPath: /app/dp-keys
+    ports:
+      - "5000:8080"
+    volumes:
+      - frontend-dp-keys:/app/dp-keys
 
 volumes:
   event-db-data:
+  user-db-data:
+  frontend-dp-keys:

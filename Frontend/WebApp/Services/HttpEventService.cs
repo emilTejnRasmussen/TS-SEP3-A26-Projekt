@@ -1,0 +1,23 @@
+using System.Net.Http.Json;
+using DTO.Event;
+
+namespace WebApp.Services;
+
+public class HttpEventService(HttpClient client) : IEventService
+{
+    // POST /api/v1/Events
+    public async Task<EventResponse> CreateAsync(CreateEventRequest request)
+    {
+        var response = await client.PostAsJsonAsync(ApiEndpoints.Events, request);
+        await ApiException.ThrowIfFailedAsync(response);
+        return (await response.Content.ReadFromJsonAsync<EventResponse>())!;
+    }
+
+    // GET /api/v1/Events
+    public async Task<List<EventOverviewResponse>> GetAllAsync()
+    {
+        var response = await client.GetAsync(ApiEndpoints.Events);
+        await ApiException.ThrowIfFailedAsync(response);
+        return await response.Content.ReadFromJsonAsync<List<EventOverviewResponse>>() ?? [];
+    }
+}

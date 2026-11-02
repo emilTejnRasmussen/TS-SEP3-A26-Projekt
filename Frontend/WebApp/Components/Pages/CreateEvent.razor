@@ -1,0 +1,114 @@
+@page "/events/create"
+@inject IEventService EventService
+
+<PageTitle>Opret begivenhed</PageTitle>
+
+<h1>Opret begivenhed</h1>
+
+<AuthorizeView Context="auth">
+    <Authorized>
+        <p class="text-muted">Du bliver vært for begivenheden som <strong>@auth.User.Identity?.Name</strong>.</p>
+
+        <EditForm Model="request" OnValidSubmit="SubmitAsync" FormName="create-event" class="col-md-6">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label">Titel</label>
+                <InputText class="form-control" @bind-Value="request.Title" />
+                <ValidationMessage For="() => request.Title" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Kort beskrivelse</label>
+                <InputText class="form-control" @bind-Value="request.ShortDescription" />
+                <ValidationMessage For="() => request.ShortDescription" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Lang beskrivelse (valgfri)</label>
+                <InputTextArea class="form-control" rows="4" @bind-Value="request.LongDescription" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Placering</label>
+                <InputText class="form-control" @bind-Value="request.Location" />
+                <ValidationMessage For="() => request.Location" />
+            </div>
+
+            <div class="row">
+                <div class="col mb-3">
+                    <label class="form-label">Tidspunkt</label>
+                    <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="request.DateTime" />
+                </div>
+                <div class="col mb-3">
+                    <label class="form-label">Max deltagere</label>
+                    <InputNumber class="form-control" @bind-Value="request.MaxParticipants" />
+                    <ValidationMessage For="() => request.MaxParticipants" />
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" disabled="@isSubmitting">Opret</button>
+            <a class="btn btn-link" href="events">Tilbage til begivenheder</a>
+        </EditForm>
+
+        @if (message is not null)
+        {
+            <div class="alert @(isError ? "alert-danger" : "alert-success") mt-3">@message</div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-info">
+            Du skal være logget ind for at oprette en begivenhed.
+            <a href="login">Log ind</a> eller <a href="register">opret en bruger</a>.
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    private CreateEventRequest request = NewRequest();
+    private string? message;
+    private bool isError;
+    private bool isSubmitting;
+
+    private async Task SubmitAsync()
+    {
+        isSubmitting = true;
+        message = null;
+        try
+        {
+            // Den indloggede bruger er vært ("sub" i JWT'en = bruger-id).
+            // TODO: Fjern, når backenden selv tager værten fra tokenet.
+            var user = (await AuthState).User;
+            if (!long.TryParse(user.FindFirst("sub")?.Value, out var userId))
+            {
+                throw new InvalidOperationException("Kunne ikke finde dit bruger-id. Log ind igen.");
+            }
+            request.HostIds = [userId];
+
+            var created = await EventService.CreateAsync(request);
+            message = $"Begivenhed \"{created.Title}\" oprettet (id {created.Id}).";
+            isError = false;
+            request = NewRequest();
+        }
+        catch (Exception e)
+        {
+            message = $"Kunne ikke oprette begivenhed: {e.Message}";
+            isError = true;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    // Standardværdier til formularen. Tidspunkt uden tidszone (Kind = Unspecified),
+    // fordi Event Serveren læser det som Java LocalDateTime.
+    private static CreateEventRequest NewRequest() => new()
+    {
+        MaxParticipants = 10,
+        DateTime = DateTime.SpecifyKind(DateTime.Today.AddDays(1).AddHours(18), DateTimeKind.Unspecified)
+    };
+}

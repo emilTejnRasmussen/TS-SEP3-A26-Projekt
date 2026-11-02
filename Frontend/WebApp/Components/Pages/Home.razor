@@ -1,0 +1,18 @@
+﻿@page "/"
+
+<PageTitle>KIN</PageTitle>
+
+<h1>KIN</h1>
+
+<p>Find, opret og tilmeld dig begivenheder.</p>
+
+<a class="btn btn-primary me-2" href="events">Se begivenheder</a>
+<AuthorizeView>
+    <Authorized>
+        <a class="btn btn-outline-primary" href="events/create">Opret begivenhed</a>
+    </Authorized>
+    <NotAuthorized>
+        <a class="btn btn-outline-primary me-2" href="login">Log ind</a>
+        <a class="btn btn-outline-secondary" href="register">Opret bruger</a>
+    </NotAuthorized>
+</AuthorizeView>

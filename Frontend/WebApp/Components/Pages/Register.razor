@@ -1,0 +1,68 @@
+@page "/register"
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+
+<PageTitle>Opret bruger</PageTitle>
+
+<h1>Opret bruger</h1>
+
+<EditForm Model="request" OnValidSubmit="SubmitAsync" FormName="register" class="col-md-6">
+    <DataAnnotationsValidator/>
+
+    <div class="mb-3">
+        <label class="form-label">Navn</label>
+        <InputText class="form-control" @bind-Value="request.Name"/>
+        <ValidationMessage For="() => request.Name"/>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" type="email" @bind-Value="request.Email"/>
+        <ValidationMessage For="() => request.Email"/>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <InputText class="form-control" type="password" @bind-Value="request.Password"/>
+        <ValidationMessage For="() => request.Password"/>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Lokation (valgfri)</label>
+        <InputText class="form-control" @bind-Value="request.Location"/>
+    </div>
+
+    <button class="btn btn-primary" type="submit" disabled="@isSubmitting">Opret</button>
+    <a class="btn btn-link" href="login">Har du allerede en bruger? Log ind</a>
+</EditForm>
+
+@if (error is not null)
+{
+    <div class="alert alert-danger mt-3">@error</div>
+}
+
+@code {
+    private RegisterRequest request = new();
+    private string? error;
+    private bool isSubmitting;
+
+    private async Task SubmitAsync()
+    {
+        isSubmitting = true;
+        error = null;
+        try
+        {
+            await AuthService.RegisterAsync(request);
+            Navigation.NavigateTo("events");
+        }
+        catch (Exception e)
+        {
+            error = $"Kunne ikke oprette bruger: {e.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+}

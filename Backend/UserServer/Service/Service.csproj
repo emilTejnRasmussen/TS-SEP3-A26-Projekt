@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DTO\DTO.csproj" />
       <ProjectReference Include="..\Entity\Entity.csproj" />
       <ProjectReference Include="..\GrpcClient\GrpcClient.csproj" />
       <ProjectReference Include="..\Mapper\Mapper.csproj" />

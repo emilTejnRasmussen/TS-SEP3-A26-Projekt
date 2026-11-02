@@ -11,6 +11,9 @@ appsettings.Local.json
 appsettings.*.Local.json
 secrets.json
 
+# ASP.NET Core Data Protection keys (frontend, ProtectedLocalStorage)
+dp-keys/
+
 # ==========================================
 # IDEs and editors
 # ==========================================
@@ -20,7 +23,9 @@ secrets.json
 *.iml
 *.DotSettings.user
 _ReSharper*/
+*.[Rr]e[Ss]harper
 *.DotCover
+*.sln.iml
 
 # Visual Studio
 .vs/
@@ -28,9 +33,18 @@ _ReSharper*/
 *.suo
 *.userosscache
 *.sln.docstates
+*.rsuser
+*.userprefs
+.localhistory/
+.vshistory/
 
 # Visual Studio Code
 .vscode/
+*.code-workspace
+.history/
+
+# Vim
+*.swp
 
 # ==========================================
 # .NET / C#
@@ -41,12 +55,37 @@ artifacts/
 **/Debug/
 **/Release/
 **/publish/
+[Dd]ebugPublic/
+[Rr]eleases/
+x64/
+x86/
+bld/
+Generated\ Files/
+project.lock.json
+project.fragment.lock.json
+mono_crash.*
+*.pdb
+*.binlog
+ScaffoldingReadMe.txt
+BenchmarkDotNet.Artifacts/
+
+# Publish settings (may contain secrets)
+*.pubxml
+*.publishproj
+*.publishsettings
+PublishScripts/
+*.pfx
 
 # NuGet
 *.nupkg
 *.snupkg
 packages/
 .nuget/packages/
+*.nuget.props
+*.nuget.targets
+
+# Node (Blazor/JS tooling)
+node_modules/
 
 # ==========================================
 # Java / Maven / Spring Boot
@@ -70,6 +109,9 @@ coverage.cobertura.xml
 *.coverage
 *.coveragexml
 *.trx
+[Tt]est[Rr]esult*/
+TestResult.xml
+*.VisualState.xml
 
 # ==========================================
 # Build and temporary files
@@ -99,8 +141,11 @@ logs/
 
 # Windows
 Thumbs.db
+ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+*.lnk
+*.stackdump
 
 # macOS
 .DS_Store

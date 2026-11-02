@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 // Kastes når backenden svarer med en fejlstatus, så siderne kan vise beskeden.
 public class ApiException(string message) : Exception(message)

@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
-using WebApp.Client.DTO.Auth;
+using DTO.Auth;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 public class HttpAuthService(HttpClient client, TokenStore tokens, JwtAuthStateProvider authState) : IAuthService
 {

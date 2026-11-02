@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
-using WebApp.Client.DTO.User;
+using DTO.User;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 public class HttpUserService(HttpClient client) : IUserService
 {

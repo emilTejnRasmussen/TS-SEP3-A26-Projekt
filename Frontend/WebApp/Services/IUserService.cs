@@ -1,6 +1,6 @@
-using WebApp.Client.DTO.User;
+using DTO.User;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 // Brugere oprettes via IAuthService.RegisterAsync - backenden har ingen POST /Users.
 public interface IUserService

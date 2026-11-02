@@ -1,25 +1,28 @@
-using WebApp.Client.Services;
+using Microsoft.AspNetCore.DataProtection;
 using WebApp.Components;
+using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
-    .AddInteractiveWebAssemblyComponents();
+// Nøglerne, der krypterer JWT'en i browserens localStorage (ProtectedLocalStorage), gemmes på disk,
+// så brugerne ikke bliver logget ud, når serveren genstartes. Stien kan ændres med "DataProtection:KeysPath".
+var keysPath = builder.Configuration["DataProtection:KeysPath"]
+               ?? Path.Combine(builder.Environment.ContentRootPath, "dp-keys");
+builder.Services.AddDataProtection()
+    .SetApplicationName("KIN.WebApp")
+    .PersistKeysToFileSystem(new DirectoryInfo(keysPath));
 
-// Samme services som i client-projektet, så sider også virker under server-rendering.
-// Base-URL læses fra appsettings.json
+// Interactive Server: komponenterne kører på serveren, og browseren får UI-opdateringer over en SignalR-forbindelse.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+
+// HttpClient, login-tilstand og backend-services. Base-URL læses fra appsettings.json.
 builder.Services.AddBackendServices(builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseWebAssemblyDebugging();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -32,8 +35,6 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(WebApp.Client._Imports).Assembly);
+    .AddInteractiveServerRenderMode();
 
 app.Run();

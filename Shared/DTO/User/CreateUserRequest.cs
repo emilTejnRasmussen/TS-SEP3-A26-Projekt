@@ -1,8 +1,8 @@
-﻿namespace DTO.User;
+namespace DTO.User;
 
 public record CreateUserRequest(
-    string name,
-    string password,
-    string email,
-    string? location
+    string Name,
+    string Password,
+    string Email,
+    string? Location
 );

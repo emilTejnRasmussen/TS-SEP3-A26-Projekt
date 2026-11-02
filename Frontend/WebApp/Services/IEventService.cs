@@ -1,6 +1,6 @@
-using WebApp.Client.DTO.Event;
+using DTO.Event;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 public interface IEventService
 {

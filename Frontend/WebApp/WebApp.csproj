@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebApp.Client\WebApp.Client.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.14" />
+    <ProjectReference Include="..\..\Shared\DTO\DTO.csproj" />
   </ItemGroup>
 
 </Project>

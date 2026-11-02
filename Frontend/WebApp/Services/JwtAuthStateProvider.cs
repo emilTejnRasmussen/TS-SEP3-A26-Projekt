@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 // Fortæller Blazor (AuthorizeView, [CascadingParameter] Task<AuthenticationState>), hvem der er logget ind.
 // Læser claims direkte fra JWT'en: "sub" (bruger-id), "email", "name" og "exp".

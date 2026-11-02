@@ -1,8 +1,8 @@
-﻿namespace DTO.User;
+namespace DTO.User;
 
 public record UserResponse(
-    long id,
-    string name,
-    string email,
-    string? location
+    long Id,
+    string Name,
+    string Email,
+    string? Location
 );

@@ -68,7 +68,7 @@
     [CascadingParameter]
     private Task<AuthenticationState> AuthState { get; set; } = null!;
 
-    private CreateEventRequest request = new();
+    private CreateEventRequest request = NewRequest();
     private string? message;
     private bool isError;
     private bool isSubmitting;
@@ -91,7 +91,7 @@
             var created = await EventService.CreateAsync(request);
             message = $"Begivenhed \"{created.Title}\" oprettet (id {created.Id}).";
             isError = false;
-            request = new();
+            request = NewRequest();
         }
         catch (Exception e)
         {
@@ -103,4 +103,12 @@
             isSubmitting = false;
         }
     }
+
+    // Standardværdier til formularen. Tidspunkt uden tidszone (Kind = Unspecified),
+    // fordi Event Serveren læser det som Java LocalDateTime.
+    private static CreateEventRequest NewRequest() => new()
+    {
+        MaxParticipants = 10,
+        DateTime = DateTime.SpecifyKind(DateTime.Today.AddDays(1).AddHours(18), DateTimeKind.Unspecified)
+    };
 }

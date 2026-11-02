@@ -11,6 +11,9 @@ appsettings.Local.json
 appsettings.*.Local.json
 secrets.json
 
+# ASP.NET Core Data Protection keys (frontend, ProtectedLocalStorage)
+dp-keys/
+
 # ==========================================
 # IDEs and editors
 # ==========================================

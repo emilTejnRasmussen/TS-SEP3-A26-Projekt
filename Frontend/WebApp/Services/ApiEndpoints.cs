@@ -1,4 +1,4 @@
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 // Alle backend-ruter samlet ét sted. Ret her, hvis backendens ruter ændres.
 // Base-URL'en (fx http://localhost:5243/) står i "ApiBaseUrl" i appsettings.json.

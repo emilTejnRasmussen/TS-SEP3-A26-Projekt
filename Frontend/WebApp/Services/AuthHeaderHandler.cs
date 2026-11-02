@@ -1,6 +1,6 @@
 using System.Net.Http.Headers;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 // Sætter "Authorization: Bearer <jwt>" på alle kald til backenden, når man er logget ind.
 public class AuthHeaderHandler(TokenStore tokens) : DelegatingHandler

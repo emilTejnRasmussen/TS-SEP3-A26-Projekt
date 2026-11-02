@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace WebApp.Services;
 
-// Fortæller Blazor (AuthorizeView, [CascadingParameter] Task<AuthenticationState>), hvem der er logget ind.
-// Læser claims direkte fra JWT'en: "sub" (bruger-id), "email", "name" og "exp".
-// Signaturen tjekkes IKKE her - det gør backenden. Frontenden bruger det kun til visning.
+// Signaturen tjekkes IKKE her - det gør backenden. Frontenden bruger kun claims til visning.
 public class JwtAuthStateProvider(TokenStore tokens) : AuthenticationStateProvider
 {
     private static readonly AuthenticationState Anonymous = new(new ClaimsPrincipal(new ClaimsIdentity()));
@@ -20,7 +18,6 @@ public class JwtAuthStateProvider(TokenStore tokens) : AuthenticationStateProvid
         var claims = ParseClaims(token);
         if (claims is null)
         {
-            // Udløbet eller ugyldigt token - smid det væk.
             await tokens.RemoveAsync();
             return Anonymous;
         }
@@ -29,7 +26,6 @@ public class JwtAuthStateProvider(TokenStore tokens) : AuthenticationStateProvid
         return new AuthenticationState(new ClaimsPrincipal(identity));
     }
 
-    // Kaldes efter login/logout, så menuen m.m. opdateres med det samme.
     public void NotifyChanged() => NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
     private static List<Claim>? ParseClaims(string jwt)

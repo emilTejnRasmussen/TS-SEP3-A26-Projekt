@@ -23,7 +23,6 @@
 </html>
 
 @code {
-    // Hele appen er interaktiv på serveren. Prerendering er slået fra, fordi JWT'en ligger i
-    // browserens (krypterede) localStorage, som først kan læses, når forbindelsen til browseren er oppe.
+    // Uden prerendering, fordi JWT'en i localStorage først kan læses, når forbindelsen til browseren er oppe.
     private static readonly IComponentRenderMode RenderModeServer = new InteractiveServerRenderMode(prerender: false);
 }

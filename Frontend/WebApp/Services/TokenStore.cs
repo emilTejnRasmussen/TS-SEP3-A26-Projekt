@@ -4,11 +4,7 @@ using Microsoft.JSInterop;
 
 namespace WebApp.Services;
 
-// Gemmer JWT'en i browserens localStorage, så man forbliver logget ind efter genindlæsning.
-// ProtectedLocalStorage krypterer værdien med ASP.NET Core Data Protection på serveren,
-// så JavaScript i browseren ikke kan læse en brugbar JWT.
-// Scoped = én instans pr. kredsløb (bruger/fane). Tokenet caches i hukommelsen, så
-// AuthHeaderHandler ikke skal spørge browseren ved hvert kald.
+// ProtectedLocalStorage krypterer JWT'en, så JavaScript i browseren ikke kan læse den.
 public class TokenStore(ProtectedLocalStorage storage)
 {
     private const string Key = "authToken";
@@ -28,12 +24,11 @@ public class TokenStore(ProtectedLocalStorage storage)
         }
         catch (CryptographicException)
         {
-            // Gammel ukrypteret værdi eller skiftede nøgler - smid den væk og log ud.
+            // Gammel ukrypteret værdi eller skiftede nøgler.
             await RemoveAsync();
         }
         catch (Exception e) when (e is InvalidOperationException or JSDisconnectedException)
         {
-            // Ingen forbindelse til browseren (endnu). Opfør os, som om man ikke er logget ind.
             return null;
         }
 

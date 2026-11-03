@@ -7,4 +7,5 @@
   <Project Path="Repository/Repository.csproj" />
   <Project Path="Service/Service.csproj" />
   <Project Path="UserAPI/UserAPI.csproj" />
+  <Project Path="Tests-UserServer/Tests-UserServer.csproj" />
 </Solution>

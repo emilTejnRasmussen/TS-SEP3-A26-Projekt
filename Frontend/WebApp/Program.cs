@@ -4,8 +4,10 @@ using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Nøglerne, der krypterer JWT'en i browserens localStorage (ProtectedLocalStorage), gemmes på disk,
-// så brugerne ikke bliver logget ud, når serveren genstartes. Stien kan ændres med "DataProtection:KeysPath".
+/* Nøglerne, der krypterer JWT'en i browserens localStorage (ProtectedLocalStorage),
+gemmes på disk, så brugerne ikke bliver logget ud,
+når serveren genstartes. Stien kan ændres med "DataProtection:KeysPath".
+ */
 var keysPath = builder.Configuration["DataProtection:KeysPath"]
                ?? Path.Combine(builder.Environment.ContentRootPath, "dp-keys");
 builder.Services.AddDataProtection()

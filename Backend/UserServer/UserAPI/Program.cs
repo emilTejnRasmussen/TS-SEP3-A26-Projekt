@@ -11,13 +11,21 @@ using Service.Interface;
 using UserAPI.ExceptionHandlers;
 using WebApi.Authentication;
 
+DotNetEnv.Env.Load("../../../.env");
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString =
+    $"Host=localhost;" +
+    $"Port=5434;" +
+    $"Database={Environment.GetEnvironmentVariable("USER_DB_NAME")};" +
+    $"Username={Environment.GetEnvironmentVariable("USER_DB_USER")};" +
+    $"Password={Environment.GetEnvironmentVariable("USER_DB_PASSWORD")}";
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<AppDbContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -42,7 +50,7 @@ builder.Services
                     "EventServer address is missing."));
         });
 
-var jwtKey = builder.Configuration["Jwt:Key"]
+var jwtKey = Environment.GetEnvironmentVariable("USER_JWT_KEY")
     ?? throw new InvalidOperationException("JWT signing key is missing.");
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]

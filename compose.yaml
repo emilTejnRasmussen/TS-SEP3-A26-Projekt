@@ -11,7 +11,7 @@ services:
     volumes:
       - event-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${USER_DB_USER} -d ${USER_DB_NAME}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${EVENT_DB_USER} -d ${EVENT_DB_NAME}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -27,6 +27,7 @@ services:
       event-db:
         condition: service_healthy
     environment:
+      SPRING_PROFILES_ACTIVE: container
       EVENT_DB_HOST: event-db
       EVENT_DB_PORT: 5432
       EVENT_DB_NAME: ${EVENT_DB_NAME}

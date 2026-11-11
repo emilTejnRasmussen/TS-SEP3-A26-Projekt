@@ -22,6 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Fakes\" />
+      <Folder Include="Mapper\" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\DTO\DTO.csproj" />
       <ProjectReference Include="..\Context\Context.csproj" />
       <ProjectReference Include="..\Entity\Entity.csproj" />

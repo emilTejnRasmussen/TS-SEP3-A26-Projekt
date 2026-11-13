@@ -16,11 +16,11 @@ DotNetEnv.Env.Load("../../../.env");
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString =
-    $"Host=localhost;" +
-    $"Port=5434;" +
-    $"Database={Environment.GetEnvironmentVariable("USER_DB_NAME")};" +
-    $"Username={Environment.GetEnvironmentVariable("USER_DB_USER")};" +
-    $"Password={Environment.GetEnvironmentVariable("USER_DB_PASSWORD")}";
+    $"Host={builder.Configuration["Database:Host"]};" +
+    $"Port={builder.Configuration["Database:Port"]};" +
+    $"Database={builder.Configuration["USER_DB_NAME"]};" +
+    $"Username={builder.Configuration["USER_DB_USER"]};" +
+    $"Password={builder.Configuration["USER_DB_PASSWORD"]}";
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -95,6 +95,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+// Dev tools - OpenApi & Swagger
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -104,24 +105,21 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "SEP3 User API");
     });
     
-    using var scope = app.Services.CreateScope();
+}
 
+// Database initialization
+using (var scope = app.Services.CreateScope())
+{
     var dbContext = scope.ServiceProvider
         .GetRequiredService<AppDbContext>();
 
     await dbContext.Database.MigrateAsync();
-}
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider
-        .GetRequiredService<AppDbContext>();
-
-    var connected = await db.Database.CanConnectAsync();
-
-    Console.WriteLine(connected
-        ? "Der er forbindelse til databasen."
-        : "Kunne ikke forbinde til databasen.");
+    /*  
+    CanConnect og skrivning til consollen er fjernet.
+    Hvis migrering er der forbindelse til databasen.
+    */
+    
 }
 
 

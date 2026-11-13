@@ -72,10 +72,12 @@ services:
       event-server:
         condition: service_healthy
     environment:
+      USER_DB_NAME: ${USER_DB_NAME}
+      USER_DB_USER: ${USER_DB_USER}
+      USER_DB_PASSWORD: ${USER_DB_PASSWORD}
       ASPNETCORE_ENVIRONMENT: Container
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__DefaultConnection: "Host=user-db;Port=5432;Database=${USER_DB_NAME};Username=${USER_DB_USER};Password=${USER_DB_PASSWORD}"
-      Jwt__Key: ${USER_JWT_KEY}
+      USER_JWT_KEY: ${USER_JWT_KEY}
       Grpc__EventServer: http://event-server:9090
     ports:
       - "8081:8080"

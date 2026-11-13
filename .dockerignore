@@ -1,0 +1,23 @@
+# Git
+.git/
+.gitignore
+
+# Environment and secrets
+.env
+.env.*
+
+# .NET build artifacts
+**/bin/
+**/obj/
+
+# Java build artifacts
+**/target/
+
+# IDE
+**/.vs/
+**/.idea/
+**/.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

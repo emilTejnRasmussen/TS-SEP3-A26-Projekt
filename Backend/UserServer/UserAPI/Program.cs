@@ -108,20 +108,23 @@ if (app.Environment.IsDevelopment())
 }
 
 // Database initialization
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider
-        .GetRequiredService<AppDbContext>();
+if (app.Environment.IsDevelopment() ||
+    app.Environment.IsEnvironment("Container"))
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider
+                .GetRequiredService<AppDbContext>();
 
-    await dbContext.Database.MigrateAsync();
+            await dbContext.Database.MigrateAsync();
 
-    /*  
-    CanConnect og skrivning til consollen er fjernet.
-    Hvis migrering er der forbindelse til databasen.
-    */
-    
-}
+            /*  
+            CanConnect og skrivning til consollen er fjernet.
+            Hvis migrering er der forbindelse til databasen.
+            */
 
+        }
+    }
 
 app.UseHttpsRedirection();
 

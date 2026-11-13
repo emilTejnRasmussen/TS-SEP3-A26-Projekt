@@ -27,6 +27,7 @@ public class Event {
     @Column(nullable = false)
     private String shortDescription;
 
+    @Column(columnDefinition = "TEXT")
     private String longDescription;
 
     @NotBlank

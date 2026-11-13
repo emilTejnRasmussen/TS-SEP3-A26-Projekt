@@ -6,7 +6,7 @@ using Services.Exceptions;
 
 namespace UserAPI.ExceptionHandlers;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
@@ -18,28 +18,31 @@ public class GlobalExceptionHandler : IExceptionHandler
             UserNotFoundException => StatusCodes.Status404NotFound,
             EmailAlreadyExistsException => StatusCodes.Status409Conflict,
             InvalidCredentialsException => StatusCodes.Status401Unauthorized,
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             InvalidCurrentPasswordException => StatusCodes.Status400BadRequest,
             ForbiddenOperationException => StatusCodes.Status403Forbidden,
             
             RpcException rpc => rpc.StatusCode switch
             {
-                StatusCode.InvalidArgument => 400,
-                StatusCode.NotFound => 404,
-                StatusCode.AlreadyExists => 409,
-                StatusCode.FailedPrecondition => 409,
-                StatusCode.PermissionDenied => 403,
-                StatusCode.Unauthenticated => 502,
-                StatusCode.Unavailable => 503,
-                StatusCode.DeadlineExceeded => 504,
-                _ => 502
+                StatusCode.InvalidArgument => StatusCodes.Status400BadRequest,
+                StatusCode.NotFound => StatusCodes.Status404NotFound,
+                StatusCode.AlreadyExists => StatusCodes.Status409Conflict,
+                StatusCode.FailedPrecondition => StatusCodes.Status409Conflict,
+                StatusCode.PermissionDenied => StatusCodes.Status403Forbidden,
+                StatusCode.Unauthenticated => StatusCodes.Status502BadGateway,
+                StatusCode.Internal => StatusCodes.Status500InternalServerError,
+                StatusCode.Unavailable => StatusCodes.Status503ServiceUnavailable,
+                StatusCode.DeadlineExceeded => StatusCodes.Status504GatewayTimeout,
+                _ => StatusCodes.Status502BadGateway
             },
 
-            _ => 0
+            _ => StatusCodes.Status500InternalServerError
         };
 
-        if (statusCode == 0)
+        if (statusCode >= StatusCodes.Status500InternalServerError)
         {
-            return false;
+            logger.LogError(exception, "Request {Method} {Path} failed with HTTP {StatusCode}",
+                httpContext.Request.Method, httpContext.Request.Path, statusCode);
         }
 
         httpContext.Response.StatusCode = statusCode;
@@ -51,11 +54,22 @@ public class GlobalExceptionHandler : IExceptionHandler
                     StatusCode.NotFound or
                     StatusCode.AlreadyExists or
                     StatusCode.FailedPrecondition
-                => rpc.Status.Detail,
+                => string.IsNullOrWhiteSpace(rpc.Status.Detail)
+                    ? "The event request could not be processed."
+                    : rpc.Status.Detail,
 
+            RpcException rpc when rpc.StatusCode == StatusCode.Internal
+                => "An unexpected error occurred on the event server",
             RpcException => "An error occurred while communicating with the event server",
 
-            _ => exception.Message
+            UnauthorizedAccessException => "Invalid user identity. Please log in again.",
+            UserNotFoundException or
+                EmailAlreadyExistsException or
+                InvalidCredentialsException or
+                InvalidCurrentPasswordException or
+                ForbiddenOperationException => exception.Message,
+
+            _ => "An unexpected error occurred"
         };
 
         await httpContext.Response.WriteAsJsonAsync(

@@ -3,6 +3,7 @@ using Entities;
 using Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Repository;
+using Repository.Exceptions;
 using Service.Interface;
 using Services.Exceptions;
 
@@ -31,8 +32,15 @@ public class AuthService(
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        var user = await userRepo.GetByEmailAsync(request.Email)
-                   ?? throw new InvalidCredentialsException();
+        User user;
+        try
+        {
+            user = await userRepo.GetByEmailAsync(request.Email);
+        }
+        catch (UserNotFoundException)
+        {
+            throw new InvalidCredentialsException();
+        }
 
         EnsureValidPassword(user, request.Password);
 

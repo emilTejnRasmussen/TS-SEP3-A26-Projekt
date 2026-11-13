@@ -1,14 +1,18 @@
 ﻿using DTO.Event;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
+using WebApi.Authentication;
 
 namespace UserAPI.Controller;
 
 public class EventsController(IEventService eventService) : ApiControllerBase
 {
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddEvent([FromBody] CreateEventRequest request)
     {
+        request.HostIds = [User.GetUserId()];
         var response = await eventService.CreateEventAsync(request);
 
         return StatusCode(StatusCodes.Status201Created, response);

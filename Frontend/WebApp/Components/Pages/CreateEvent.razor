@@ -65,9 +65,6 @@
 </AuthorizeView>
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthState { get; set; } = null!;
-
     private CreateEventRequest request = NewRequest();
     private string? message;
     private bool isError;
@@ -79,14 +76,6 @@
         message = null;
         try
         {
-            // TODO: Fjern, når backenden selv tager værten fra JWT'en ("sub" = bruger-id).
-            var user = (await AuthState).User;
-            if (!long.TryParse(user.FindFirst("sub")?.Value, out var userId))
-            {
-                throw new InvalidOperationException("Kunne ikke finde dit bruger-id. Log ind igen.");
-            }
-            request.HostIds = [userId];
-
             var created = await EventService.CreateAsync(request);
             message = $"Begivenhed \"{created.Title}\" oprettet (id {created.Id}).";
             isError = false;

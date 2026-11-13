@@ -89,6 +89,21 @@ Use the port displayed in the terminal.
 
 ## Development
 
+### Event authentication and error responses
+
+Creating an event (`POST /api/v1/events`) requires a bearer token from login or
+registration. UserServer sets the event's host to the authenticated user's ID
+from the token's `sub` claim; any `HostIds` supplied in the request are overwritten.
+The ID must be a positive 64-bit integer. Event GET endpoints remain public.
+
+Authentication failures return HTTP 401, permission failures return HTTP 403,
+and invalid request bodies return HTTP 400. These responses use the same JSON
+format as the exception handler so the frontend can display the message:
+
+```json
+{ "error": "A message describing the error" }
+```
+
 ### Database Migrations
 
 When modifying entities in a way that changes the database schema, generate a migration:
